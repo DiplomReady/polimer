@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">My Application</string>
+    <string name="name">ОАО\n"Белвторполимер"</string>
+    <string name="catalog">Электронный каталог</string>
+    <string name="belvp_mail_ru">Электронная почта:\nbelvp@mail.ru\n\nОАО "Белвторполимер".</string>
+
+    <string-array name="home_catalog">
+        <item>Трубы</item>
+        <item>Пленка</item>
+        <item>Строительные изделия</item>
+        <item>Для сада и огорода</item>
+        <item>Упаковочные изделия</item>
+        <item>Продукты переработки</item>
+    </string-array>
+
+    <string-array name="pipe_catalog">
+        <item>Муфты соединительные</item>
+        <item>Трубы для парников</item>
+        <item>Трубы для поручней</item>
+        <item>Элементы детских игровых площадок</item>
+        <item>Трубы для карданных валов</item>
+        <item>Трубы полиэтиленновые технические</item>
+    </string-array>
+</resources>
