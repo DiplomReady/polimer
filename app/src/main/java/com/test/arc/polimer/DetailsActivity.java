@@ -1,16 +1,14 @@
 package com.test.arc.polimer;
 
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.test.arc.polimer.adapters.SubAdapter;
-import com.test.arc.polimer.model.HomeItem;
+import com.bumptech.glide.Glide;
 import com.test.arc.polimer.model.SubItem;
 
 public class DetailsActivity extends AppCompatActivity {
@@ -24,11 +22,17 @@ public class DetailsActivity extends AppCompatActivity {
         setTitle(subItem.getTitle());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        ((TextView)findViewById(R.id.description)).setText(subItem.getDescription());
+        ((TextView) findViewById(R.id.description)).setText(subItem.getDescription());
 
-        int subItemImage = subItem.getImage();
-        if(subItemImage != 0){
-            ((ImageView)findViewById(R.id.image)).setImageDrawable(getDrawable(subItemImage));
+        String subItemImage = subItem.getImage();
+        if (!TextUtils.isEmpty(subItemImage)) {
+
+            ImageView imageView = (ImageView) findViewById(R.id.image);
+            imageView.setVisibility(View.VISIBLE);
+            Glide.with(this)
+                    .asBitmap()
+                    .load(subItemImage)
+                    .into(imageView);
         }
     }
 }

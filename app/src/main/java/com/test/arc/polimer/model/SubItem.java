@@ -1,12 +1,13 @@
 package com.test.arc.polimer.model;
 
-import androidx.annotation.DrawableRes;
+import android.text.Html;
+import android.text.Spanned;
 
 import java.io.Serializable;
 
 public class SubItem implements Serializable {
     private String title;
-    @DrawableRes int image;
+    private String imageUrl;
     private String description;
 
     public SubItem(String title, String description) {
@@ -22,16 +23,16 @@ public class SubItem implements Serializable {
         this.title = title;
     }
 
-    public int getImage() {
-        return image;
+    public String getImage() {
+        return imageUrl;
     }
 
-    public void setImage(int image) {
-        this.image = image;
+    public void setImage(String image) {
+        this.imageUrl = image;
     }
 
-    public String getDescription() {
-        return description;
+    public Spanned getDescription() {
+        return Html.fromHtml(description);
     }
 
     public void setDescription(String description) {
