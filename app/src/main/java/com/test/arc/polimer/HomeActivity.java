@@ -1,10 +1,10 @@
 package com.test.arc.polimer;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -15,14 +15,17 @@ import com.test.arc.polimer.adapters.HomeAdapter;
 import com.test.arc.polimer.api.NetworkService;
 import com.test.arc.polimer.model.Data;
 import com.test.arc.polimer.model.HomeItem;
-import com.test.arc.polimer.model.SubItem;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.Single;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -38,14 +41,26 @@ public class HomeActivity extends AppCompatActivity {
     private void createData() {
         final ProgressBar progressBar = findViewById(R.id.progress);
         progressBar.setVisibility(View.VISIBLE);
+
         NetworkService.getInstance()
                 .getJSONApi()
                 .getData()
-                .enqueue(new Callback<Data>() {
+                .subscribeOn(Schedulers.io())
+                .flatMap(new Function<Data, ObservableSource<Data>>() {
                     @Override
-                    public void onResponse(@NonNull Call<Data> call, @NonNull Response<Data> response) {
+                    public ObservableSource<Data> apply(Data data) throws Exception {
+                        for (HomeItem item : data.getItems()) {
+                            App.getInstance().getDatabase().dataDao().insert(item);
+                        }
+                        return Observable.just(data);
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Data>() {
+                    @Override
+                    public void accept(Data data) throws Exception {
                         progressBar.setVisibility(View.GONE);
-                        List<HomeItem> items = response.body().getItems();
+                        List<HomeItem> items = data.getItems();
                         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.home_recycler_view);
                         recyclerView.setHasFixedSize(true);
                         LinearLayoutManager layoutManager = new LinearLayoutManager(HomeActivity.this);
@@ -53,11 +68,45 @@ public class HomeActivity extends AppCompatActivity {
                         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
                         recyclerView.setAdapter(new HomeAdapter(items));
                     }
-
+                }, new Consumer<Throwable>() {
                     @Override
-                    public void onFailure(@NonNull Call<Data> call, @NonNull Throwable t) {
+                    public void accept(Throwable throwable) throws Exception {
+                        Log.d("***", "Error: " + throwable.getMessage());
+                        throwable.printStackTrace();
                         progressBar.setVisibility(View.GONE);
-                        t.printStackTrace();
+
+
+                        Single.fromCallable(new Callable<List<HomeItem>>() {
+                            @Override
+                            public List<HomeItem> call() throws Exception {
+                                List<HomeItem> all = App.getInstance().getDatabase().dataDao().getAll();
+                                return all;
+                            }
+                        })
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(new Consumer<List<HomeItem>>() {
+                                    @Override
+                                    public void accept(List<HomeItem> all) throws Exception {
+                                        if (all != null && !all.isEmpty()) {
+                                            List<HomeItem> items = all;
+                                            RecyclerView recyclerView = (RecyclerView) findViewById(R.id.home_recycler_view);
+                                            recyclerView.setHasFixedSize(true);
+                                            LinearLayoutManager layoutManager = new LinearLayoutManager(HomeActivity.this);
+                                            recyclerView.setLayoutManager(layoutManager);
+                                            recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
+                                            recyclerView.setAdapter(new HomeAdapter(items));
+                                        }
+                                    }
+                                }, new Consumer<Throwable>() {
+                                    @Override
+                                    public void accept(Throwable throwable) throws Exception {
+                                        Log.d("***", "Error: " + throwable.getMessage());
+                                        throwable.printStackTrace();
+                                    }
+                                });
+
+
                     }
                 });
 
