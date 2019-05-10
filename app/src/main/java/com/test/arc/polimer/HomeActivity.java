@@ -1,11 +1,15 @@
 package com.test.arc.polimer;
 
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -59,6 +63,20 @@ public class HomeActivity extends AppCompatActivity {
                 .subscribe(new Consumer<Data>() {
                     @Override
                     public void accept(Data data) throws Exception {
+                        if (Float.valueOf(BuildConfig.VERSION_NAME).compareTo(data.version) < 0) {
+                            AlertDialog alertDialog = new AlertDialog.Builder(HomeActivity.this).create();
+                            alertDialog.setTitle("Alert");
+                            alertDialog.setMessage("App update required");
+                            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/")));
+                                            dialog.dismiss();
+                                        }
+                                    });
+                            alertDialog.show();
+                        }
+
                         progressBar.setVisibility(View.GONE);
                         List<HomeItem> items = data.getItems();
                         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.home_recycler_view);

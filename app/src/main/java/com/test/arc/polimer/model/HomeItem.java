@@ -12,7 +12,7 @@ import java.util.ArrayList;
 @Entity
 public class HomeItem implements Serializable {
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     public long id;
 
     private String title;

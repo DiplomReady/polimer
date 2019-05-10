@@ -3,7 +3,7 @@ package com.test.arc.polimer.model;
 import java.util.List;
 
 public class Data {
-    Double version;
+    public Float version;
 
     List<HomeItem> items;
 
