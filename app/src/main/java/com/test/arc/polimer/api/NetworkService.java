@@ -11,7 +11,7 @@ import retrofit2.http.GET;
 
 public class NetworkService {
     private static NetworkService mInstance;
-    private static final String BASE_URL = "https://www.dropbox.com/s/s6eiumso7ijlk5z/";
+    private static final String BASE_URL = "https://www.dropbox.com/s/9o32nkl2x1ke5mo/";
     private Retrofit mRetrofit;
 
     private NetworkService() {
