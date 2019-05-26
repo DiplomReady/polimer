@@ -48,6 +48,7 @@ public class SubAdapter extends RecyclerView.Adapter<SubAdapter.HomeViewHolder> 
         holder.textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //открытие деталей категории
                 Intent intent = new Intent(v.getContext(), DetailsActivity.class);
                 intent.putExtra(DetailsActivity.DATA_KEY, subItem);
                 v.getContext().startActivity(intent);

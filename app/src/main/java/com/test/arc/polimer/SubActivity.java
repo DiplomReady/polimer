@@ -16,6 +16,7 @@ import com.test.arc.polimer.model.SubItem;
 import java.util.ArrayList;
 import java.util.List;
 
+//экран с категориями айтема который выбрали на главном экране(HomeActivity)
 public class SubActivity extends AppCompatActivity {
     public static final String DATA_KEY = "data";
 
@@ -23,10 +24,13 @@ public class SubActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sub);
+        //достаем данные из интента, мы добавляем эти данные в интент в HomeAdapter
         HomeItem homeItem = (HomeItem) getIntent().getSerializableExtra(DATA_KEY);
         setTitle(homeItem.getTitle());
+        //показываем стрелку назад в меню
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        //показывавем данные
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.sub_recycler_view);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);

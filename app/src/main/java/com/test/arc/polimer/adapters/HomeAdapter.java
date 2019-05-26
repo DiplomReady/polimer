@@ -45,6 +45,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
         holder.textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //открытие меню с сабкатегориями
                 Intent intent = new Intent(v.getContext(), SubActivity.class);
                 intent.putExtra(SubActivity.DATA_KEY, homeItem);
                 v.getContext().startActivity(intent);

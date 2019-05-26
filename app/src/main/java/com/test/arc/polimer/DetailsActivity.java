@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.test.arc.polimer.model.SubItem;
 
+//экран деталей категории которую выбрали на SubActivity
 public class DetailsActivity extends AppCompatActivity {
     public static final String DATA_KEY = "det_data";
 
@@ -24,7 +25,9 @@ public class DetailsActivity extends AppCompatActivity {
 
         ((TextView) findViewById(R.id.description)).setText(subItem.getDescription());
 
+
         String subItemImage = subItem.getImage();
+        //Проверяем есть ли картинка, загружаем с помощью Glide и показываем юзеру
         if (!TextUtils.isEmpty(subItemImage)) {
 
             ImageView imageView = (ImageView) findViewById(R.id.image);
