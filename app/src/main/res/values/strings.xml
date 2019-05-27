@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">Belvtorpolimer</string>
     <string name="name">ОАО\n"Белвторполимер"</string>
     <string name="catalog">Электронный каталог</string>
     <string name="belvp_mail_ru">Электронная почта:\nbelvp@mail.ru\n\nОАО "Белвторполимер".</string>
